@@ -9,6 +9,7 @@ const app = express();
 
 // Load Route file
 const feedRoutes = require('./routes/feed');
+const authRoutes = require('./routes/auth');
 
 // Config Storage
 const fileStorage = multer.diskStorage({
@@ -48,14 +49,16 @@ app.use((req, res, next) => {
 }); // must declare this before using any route
 
 // Route setup
-app.use('/feed', feedRoutes); 
+app.use('/feed', feedRoutes);
+app.use('/auth', authRoutes);
 
 // Error hanlder middleware
 app.use((error, req, res, next) => {
-    console.log(error);
-    const status = error.statusCode || 500;
-    const message = error.message;
-    res.status(status).json({ message: message });
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
 });
 
 mongoose
